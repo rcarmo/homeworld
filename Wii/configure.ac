@@ -34,29 +34,33 @@ fi
 #AC_LIBTOOL_DLOPEN
 AM_PROG_LIBTOOL
 
-#check for path to devkit first
-AC_MSG_CHECKING([for DEVKITPPC path])
-if test "$DEVKITPPC" = ""; then
+#check for path to devkitPro first
+AC_MSG_CHECKING([for devkitPRO path])
+if test "$DEVKITPRO" = ""; then
 	AC_MSG_RESULT([Not set])
-	AC_MSG_ERROR([Please set DEVKITPPC in your environment. export DEVKITPPC=<path to devkitPPC>])
+	AC_MSG_ERROR([Please set DEVKITPRO in your environment. export DEVKITPRO=<path to devkitPRO>])
+fi
+AC_MSG_RESULT([Using $DEVKITPRO])
+
+#check for path to devkitPPC second
+AC_MSG_CHECKING([for devkitPPC path])
+if test "$DEVKITPPC" = ""; then
+	DEVKITPPC=$DEVKITPRO/devkitPPC
+	AC_MSG_RESULT([Not set.])
 fi
 AC_MSG_RESULT([Using $DEVKITPPC])
 
-#check for path to libogc
-AC_MSG_CHECKING([for libogc path])
-if test "$LIBOGC" = ""; then
-	AC_MSG_RESULT([Not set])
-	AC_MSG_ERROR([Please set LIBOGC in your environment. export LIBOGC=<path to libogc>])
-fi
-AC_MSG_RESULT([Using $LIBOGC])
+LIBOGC=$DEVKITPRO/libogc
+AC_SUBST(LIBOGC)
 
-#check for path to SDL Wii
-AC_MSG_CHECKING([for SDL wii path])
-if test "$SDLWII" = ""; then
-	AC_MSG_RESULT([Not set])
-	AC_MSG_ERROR([Please set SDLWII in your environment. export SDLWII=<path to SDL Wii>])
-fi
-AC_MSG_RESULT([Using $SDLWII])
+SDLWII=$DEVKITPRO/sdlwii
+AC_SUBST(SDLWII)
+
+LIBOGC_INC=$LIBOGC/include
+AC_SUBST(LIBOGC_INC)
+
+LIBOGC_LIB=$LIBOGC/lib/wii
+AC_SUBST(LIBOGC_LIB)
 
 dnl Check if building on Windows (based off GTK+ 2.2.4 configure.in...I'm not
 dnl very familiar with autoconf).
