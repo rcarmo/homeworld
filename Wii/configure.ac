@@ -40,13 +40,6 @@ dnl AX_CREATE_STDINT_H
 dnl "bool" supported by C++ compiler?
 dnl AC_CXX_BOOL
 
-dnl Check for SDL.
-SDL_VERSION=1.2.0
-AM_PATH_SDL($SDL_VERSION,
-            :,
-            AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
-)
-
 dnl Configure options for building Raiders version.
 AC_ARG_ENABLE(raiders,
 	AS_HELP_STRING([--enable-raiders],[build a Raiders Retreat binary for Homeworld]),
