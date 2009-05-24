@@ -3,6 +3,20 @@ AC_CONFIG_AUX_DIR(config)
 AC_CANONICAL_TARGET
 AC_CANONICAL_HOST
 AC_CANONICAL_SYSTEM
+#---------------------------------------------------------------------------------
+# the prefix on the compiler executables
+#---------------------------------------------------------------------------------
+GEKKOPREFIX=powerpc-gekko-
+
+AS=$GEKKOPREFIXas
+CC=$GEKKOPREFIXgcc
+CXX=$GEKKOPREFIXg++
+AR=$GEKKOPREFIXar
+OBJCOPY=$GEKKOPREFIXobjcopy
+
+MACHDEP="-DGEKKO -mrvl -mcpu=750 -meabi -mhard-float"
+AC_SUBST(MACHDEP)
+
 AM_INIT_AUTOMAKE([-Wall foreign dist-bzip2])
 
 AC_PROG_CC
