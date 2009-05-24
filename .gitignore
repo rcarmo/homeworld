@@ -1,0 +1,11 @@
+*.o
+*.lo
+*.a
+*.la
+*.Po
+*.Plo
+*~
+*Makefile
+*Makefile.in
+*configure
+
