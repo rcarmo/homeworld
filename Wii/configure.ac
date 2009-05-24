@@ -89,6 +89,7 @@ if test "${build}" != "${host}" ; then
 else
   CC_FOR_BUILD="${CC}"
 fi
+AM_CONDITIONAL(X86_CPU, test 1 = 0)
 
 dnl Force generic ETG function call
 AC_ARG_ENABLE(generic_ETG,
