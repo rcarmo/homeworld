@@ -136,6 +136,8 @@ AC_ARG_ENABLE(oldsound,
         AS_HELP_STRING([--enable-oldsound],[include old sound objects into Homeworld]),[oldsound=yes])
 AM_CONDITIONAL(OLD_SOUND, test "$oldsound" = "yes")
 
+AM_CONDITIONAL(WII, test 1 = 1)
+
 AC_SUBST([MOVIE_LIBS])
 AC_SUBST([NET_LIBS])
 AC_SUBST([SSE_FLAGS])
