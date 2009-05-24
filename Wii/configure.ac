@@ -17,8 +17,32 @@ AM_PROG_LEX
 if test "$LEX" = :; then
   AC_MSG_ERROR([This package needs lex to compile.])
 fi
-AC_LIBTOOL_DLOPEN
+#AC_LIBTOOL_DLOPEN
 AM_PROG_LIBTOOL
+
+#check for path to devkit first
+AC_MSG_CHECKING([for DEVKITPPC path])
+if test "$DEVKITPPC" = ""; then
+	AC_MSG_RESULT([Not set])
+	AC_MSG_ERROR([Please set DEVKITPPC in your environment. export DEVKITPPC=<path to devkitPPC>])
+fi
+AC_MSG_RESULT([Using $DEVKITPPC])
+
+#check for path to libogc
+AC_MSG_CHECKING([for libogc path])
+if test "$LIBOGC" = ""; then
+	AC_MSG_RESULT([Not set])
+	AC_MSG_ERROR([Please set LIBOGC in your environment. export LIBOGC=<path to libogc>])
+fi
+AC_MSG_RESULT([Using $LIBOGC])
+
+#check for path to SDL Wii
+AC_MSG_CHECKING([for SDL wii path])
+if test "$SDLWII" = ""; then
+	AC_MSG_RESULT([Not set])
+	AC_MSG_ERROR([Please set SDLWII in your environment. export SDLWII=<path to SDL Wii>])
+fi
+AC_MSG_RESULT([Using $SDLWII])
 
 dnl Check if building on Windows (based off GTK+ 2.2.4 configure.in...I'm not
 dnl very familiar with autoconf).
