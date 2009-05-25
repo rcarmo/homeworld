@@ -37,7 +37,7 @@ AM_PROG_LIBTOOL
 #check for path to devkitPro first
 AC_MSG_CHECKING([for devkitPRO path])
 if test "$DEVKITPRO" = ""; then
-	AC_MSG_RESULT([Not set])
+	AC_MSG_RESULT([Not set.])
 	AC_MSG_ERROR([Please set DEVKITPRO in your environment. export DEVKITPRO=<path to devkitPRO>])
 fi
 AC_MSG_RESULT([Using $DEVKITPRO])
