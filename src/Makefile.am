@@ -1,3 +1,7 @@
+if WII
+include $(DEVKITPPC)/wii_rules
+endif
+
 # Additional defined flags for extra warnings.
 # CFLAGS += -malign-double -Wall -fno-strict-aliasing -Wextra -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls
 
@@ -28,6 +32,12 @@ DEP_LIBS = \
    ./ThirdParty/LZSS/libhw_LZSS.a
 
 homeworld_LIBTOOLFLAGS = --preserve-dup-deps
-homeworld_LDADD = $(HW_LIBS) $(DEP_LIBS) -L/usr/X11R6/lib -lX11 -lXext @SDL_LIBS@ $(MOVIE_LIBS) $(NET_LIBS)
+homeworld_LDADD = $(HW_LIBS) $(DEP_LIBS) @SDL_LIBS@ $(MOVIE_LIBS) $(NET_LIBS)
+if WII
+homeworld_LDADD +=
+else
+homeworld_LDADD += -L/usr/X11R6/lib -lX11 -lXext
+endif
+
 homeworld_LDFLAGS = -Wl,--as-needed
 
