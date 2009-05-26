@@ -72,12 +72,18 @@ dnl AX_CREATE_STDINT_H
 dnl "bool" supported by C++ compiler?
 dnl AC_CXX_BOOL
 
+dnl Check for SDL.
+SDL_CFLAGS=`$SDLWII/lib/wii/sdl-config --cflags`
+AC_SUBST(SDL_CFLAGS)
+SDL_LIBS=`$SDLWII/lib/wii/sdl-config --libs`
+AC_SUBST(SDL_LIBS)
+
 dnl Configure options for building Raiders version.
 AC_ARG_ENABLE(raiders,
 	AS_HELP_STRING([--enable-raiders],[build a Raiders Retreat binary for Homeworld]),
 	enable_raiders=yes)
 if test "x$enable_raiders" = "xyes" ; then
-	echo "* Building Raiders Retreat binary for Homeworld (HW_GAME_RAIDER_RETREAT) *"
+	AC_MSG_RESULT([* Building Raiders Retreat binary for Homeworld (HW_GAME_RAIDER_RETREAT) *])
 	HWGAME_CFLAGS="-DHW_GAME_RAIDER_RETREAT"
 fi
 
