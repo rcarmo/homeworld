@@ -117,14 +117,8 @@ fi
 AM_CONDITIONAL(X86_CPU, test 1 = 0)
 
 dnl Force generic ETG function call
-AC_ARG_ENABLE(generic_ETG,
-	AS_HELP_STRING([--enable-generic-etg],
-        [Some platforms have assembly implementation of etgFunctionCall, if you want to test the C only generic implementation on these platforms use this option]),
-        enable_generic_etg=yes)
-if test "x$enable_generic_etg" = "xyes" ; then
-    echo "* Forceing generic etgFunctionCall (-DGENERIC_ETGCALLFUNCTION) *"
-    CFLAGS="$CFLAGS -DGENERIC_ETGCALLFUNCTION "
-fi
+AC_MSG_RESULT([* Forceing generic etgFunctionCall (-DGENERIC_ETGCALLFUNCTION) *])
+CFLAGS="$CFLAGS -DGENERIC_ETGCALLFUNCTION "
 
 dnl Configure options for Enabling Movies.
 AC_ARG_ENABLE(movies,
@@ -134,7 +128,7 @@ if test "x$movies" = "xyes" ; then
 		AC_CHECK_HEADER([ffmpeg/avcodec.h], [
 			AC_CHECK_LIB([avcodec], [img_convert], [
 				AC_CHECK_LIB([avformat],[av_open_input_file],[
-			        	echo "* Including Movie code for Homeworld (HW_ENABLE_MOVIES) *"
+			        	AC_MSG_RESULT([* Including Movie code for Homeworld (HW_ENABLE_MOVIES) *])
 				        HWGAME_CFLAGS="$HWGAME_CFLAGS -DHW_ENABLE_MOVIES"
 				        MOVIE_LIBS="-lavcodec -lavformat"
 				],[])
