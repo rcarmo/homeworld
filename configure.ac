@@ -98,7 +98,7 @@ fi
 
 dnl Configure options for building Raiders version.
 if test "x$HWGAME_CFLAGS" = "x" ; then
-	echo "* Building Release binary for Homeworld (HW_GAME_HOMEWORLD) *"
+	AC_MSG_RESULT([* Building Release binary for Homeworld (HW_GAME_HOMEWORLD) *])
 	HWGAME_CFLAGS="-DHW_GAME_HOMEWORLD"
 fi
 
@@ -107,10 +107,10 @@ AC_ARG_ENABLE(hwdebug,
 	AS_HELP_STRING([--enable-hwdebug],[build a debug binary for Homeworld]),
 	enable_hwdebug=yes)
 if test "x$enable_hwdebug" = "xyes" ; then
-	echo "* Building debug binary for Homeworld (HW_BUILD_FOR_DEBUGGING) *"
+	AC_MSG_RESULT([* Building debug binary for Homeworld (HW_BUILD_FOR_DEBUGGING) *])
 	HWBIN_CFLAGS="-DHW_BUILD_FOR_DEBUGGING"
 else
-	echo "* Building distribution binary for Homeworld (HW_BUILD_FOR_DISTRIBUTION) *"
+	AC_MSG_RESULT([* Building distribution binary for Homeworld (HW_BUILD_FOR_DISTRIBUTION) *])
 	HWBIN_CFLAGS="-DHW_BUILD_FOR_DISTRIBUTION"
 fi
 
