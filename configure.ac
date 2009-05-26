@@ -143,7 +143,7 @@ AC_ARG_ENABLE(network,
 if test "x$network" = "xyes" ; then
 	AC_CHECK_HEADER([SDL/SDL_net.h],[
 		AC_CHECK_LIB([SDL_net], [SDLNet_Init], [
-		        echo "* Including Network Game code for Homeworld (HW_ENABLE_NETWORK) *"
+		        AC_MSG_RESULT([* Including Network Game code for Homeworld (HW_ENABLE_NETWORK) *])
 			HWGAME_CFLAGS="$HWGAME_CFLAGS -DHW_ENABLE_NETWORK"	
 			NET_LIBS="-lSDL_net"
 		], [])
@@ -151,11 +151,11 @@ if test "x$network" = "xyes" ; then
 fi
 
 dnl Configure options for Enabling old sound code.
-AC_ARG_ENABLE(oldsound,
-        AS_HELP_STRING([--enable-oldsound],[include old sound objects into Homeworld]),[oldsound=yes])
-AM_CONDITIONAL(OLD_SOUND, test "$oldsound" = "yes")
+#AC_ARG_ENABLE(oldsound,
+#        AS_HELP_STRING([--enable-oldsound],[include old sound objects into Homeworld]),[oldsound=yes])
+AM_CONDITIONAL(OLD_SOUND, false)
 
-AM_CONDITIONAL(WII, test 1 = 1)
+AM_CONDITIONAL(WII, true)
 
 AC_SUBST([MOVIE_LIBS])
 AC_SUBST([NET_LIBS])
