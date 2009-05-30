@@ -56,6 +56,14 @@ typedef struct tagvertex
     int   iVertexNormal;                   // Index into the point normal list.
 } vertexentry;
 
+/* compared to wii
+typedef struct _vtx {
+	f32 x,y,z;
+	u16 s,t;
+	u32 rgba;
+} Vtx;
+*/
+
 typedef struct
 {
     float x, y, z, w;
