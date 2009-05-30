@@ -1,7 +1,3 @@
-if WII
-include $(DEVKITPPC)/wii_rules
-endif
-
 # Additional defined flags for extra warnings.
 # CFLAGS += -malign-double -Wall -fno-strict-aliasing -Wextra -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls
 
