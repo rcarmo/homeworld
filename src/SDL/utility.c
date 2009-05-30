@@ -5115,6 +5115,7 @@ void utyToggleKeyStatesRestore(void)
     state[SDLK_CAPSLOCK]  = (state[SDLK_CAPSLOCK]  & 0xfe) | (utyCapsLockState);
     state[SDLK_NUMLOCK]   = (state[SDLK_NUMLOCK]   & 0xfe) | (utyNumLockState);
     state[SDLK_SCROLLOCK] = (state[SDLK_SCROLLOCK] & 0xfe) | (utyScrollLockState);
+#endif //!GEKKO
 }
 
 /*-----------------------------------------------------------------------------
