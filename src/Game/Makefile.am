@@ -26,6 +26,13 @@ KNITransform.o: KNITransform.c
 	then mv "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; \
 	else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; \
 	fi
+else if WII
+KNITransform.o: WiiTransform.c
+	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" \
+	  -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<; \
+	then mv "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; \
+	else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; \
+	fi
 else
 KNITransform.o: StubTransform.c
 	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" \
