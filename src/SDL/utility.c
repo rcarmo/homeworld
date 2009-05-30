@@ -123,6 +123,8 @@
     #include <sys/types.h>
     #include <sys/mman.h>
     #include <unistd.h>
+#elif defined(GEKKO)
+    #include <unistd.h>
 #else
     #include <sys/mman.h>
     #include <unistd.h>
@@ -3543,6 +3545,8 @@ void *utyGrowthHeapAlloc(sdword size)
     dbgAssertOrIgnore(size > 0);
 #ifdef _WIN32
     return((void *)VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE));
+#elif defined(GEKKO)
+    return malloc(size);
 #else
     return mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #endif
@@ -3865,6 +3869,8 @@ char* utyGameSystemsPreInit(void)
     
 #ifdef _WIN32
     utyMemoryHeap = (void *)VirtualAlloc(NULL, MemoryHeapSize + sizeof(memcookie) * 4, MEM_COMMIT, PAGE_READWRITE);
+#elif defined(GEKKO)
+    utyMemoryHeap = malloc(MemoryHeapSize + sizeof(memcookie) * 4);
 #else
     utyMemoryHeap = mmap(0, MemoryHeapSize + sizeof(memcookie) * 4,
         PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
@@ -4377,6 +4383,8 @@ char* utyGameSystemsPreShutdown(void)
 #ifdef _WIN32
         bool result = VirtualFree(utyMemoryHeap, 0, MEM_RELEASE);
         dbgAssertOrIgnore(result);
+#elif defined(GEKKO)
+	free(utyMemoryHeap);
 #else
         dbgAssertAlwaysDo(munmap(utyMemoryHeap, 0) != -1);
 #endif

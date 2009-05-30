@@ -11,7 +11,7 @@
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
-#else
+#elif !defined(GEKKO)
     #include <sys/mman.h>
 #endif
 
@@ -137,6 +137,8 @@ void ssTakeScreenshot(void)
 #ifdef _WIN32
         (void *)VirtualAlloc(NULL, 3 * MAIN_WindowWidth * MAIN_WindowHeight,  // 3 = RGB
             MEM_COMMIT, PAGE_READWRITE);
+#elif defined(GEKKO)
+	malloc(3 * MAIN_WindowWidth * MAIN_WindowHeight);
 #else
         mmap(NULL, 3 * MAIN_WindowWidth * MAIN_WindowHeight,
             PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
@@ -154,6 +156,8 @@ void ssTakeScreenshot(void)
 #ifdef _WIN32
         result = VirtualFree(buf, 0, MEM_RELEASE);
         dbgAssertOrIgnore(result);
+#elif defined(GEKKO)
+	free(screenshot_buffer);
 #else
         result = munmap(screenshot_buffer, 3*MAIN_WindowWidth*MAIN_WindowHeight);
         dbgAssertOrIgnore(result != -1);
