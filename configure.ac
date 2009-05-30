@@ -72,9 +72,9 @@ dnl "bool" supported by C++ compiler?
 dnl AC_CXX_BOOL
 
 dnl Check for SDL.
-SDL_CFLAGS=`$SDLWII/lib/wii/sdl-config --cflags`
+SDL_CFLAGS=`$LIBOGC_LIB/sdl-config --cflags`
 AC_SUBST(SDL_CFLAGS)
-SDL_LIBS=`$SDLWII/lib/wii/sdl-config --libs`
+SDL_LIBS=`$LIBOGC_LIB/sdl-config --libs`
 AC_SUBST(SDL_LIBS)
 
 dnl Configure options for building Raiders version.
