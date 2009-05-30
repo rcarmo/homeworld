@@ -40,11 +40,10 @@ if test "$DEVKITPPC" = ""; then
 fi
 AC_MSG_RESULT([Using $DEVKITPPC])
 
+WII_INCLUDE="-nostdinc -I$DEVKITPPC/powerpc-gekko/include -I$DEVKITPPC/lib/gcc/powerpc-gekko/4.2.4/include"
+
 LIBOGC=$DEVKITPRO/libogc
 AC_SUBST(LIBOGC)
-
-SDLWII=$DEVKITPRO/SDL-Port
-AC_SUBST(SDLWII)
 
 LIBOGC_INC=$LIBOGC/include
 AC_SUBST(LIBOGC_INC)
@@ -176,8 +175,8 @@ dnl   HW_BUILD_FOR_DEBUGGING is set via "--enable-hwdebug";
 dnl   HW_BUILD_FOR_DISTRIBUTION is the default.
 dnl - $SDL_CFLAGS and $SDL_LIBS should be pretty much self-explanatory. =]
 dnl - We don't want to include $SDL_LIBS when building librgl.
-CFLAGS="$CFLAGS $HWGAME_CFLAGS $HWBIN_CFLAGS $SDL_CFLAGS $WIN32_FIXME"
+CFLAGS="$CFLAGS $HWGAME_CFLAGS $HWBIN_CFLAGS $SDL_CFLAGS $WII_INCLUDE $WIN32_FIXME"
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile src/Game/Makefile src/Missions/Generated/Makefile src/ThirdParty/Makefile src/ThirdParty/CRC/Makefile src/ThirdParty/JPG/Makefile src/ThirdParty/LZSS/Makefile src/ThirdParty/Titan/Makefile src/SDL/Makefile src/Ships/Makefile src/obj/Makefile tools/Makefile tools/kas2c/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/Game/Makefile src/Missions/Generated/Makefile src/ThirdParty/Makefile src/ThirdParty/CRC/Makefile src/ThirdParty/JPG/Makefile src/ThirdParty/LZSS/Makefile src/ThirdParty/Titan/Makefile src/SDL/Makefile src/Ships/Makefile src/obj/Makefile tools/Makefile])
 AC_OUTPUT
