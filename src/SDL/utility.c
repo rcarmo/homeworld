@@ -5019,6 +5019,9 @@ void utyToggleKeyStatesSave(void)
 ----------------------------------------------------------------------------*/
 void utyToggleKeyStatesRestore(void)
 {
+#ifdef GEKKO
+#warning utyToggleKeyStatesRestore currently not implemented for Wii!!!
+#else
     Uint8* state;
 #if !defined(_WIN32) && !defined(_MACOSX)
     SDL_SysWMinfo info;
