@@ -27,7 +27,7 @@ KNITransform.o: KNITransform.c
 	else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; \
 	fi
 else
-KNITransform.o: Transformer.c
+KNITransform.o: StubTransform.c
 	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" \
 	  -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<; \
 	then mv "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; \
