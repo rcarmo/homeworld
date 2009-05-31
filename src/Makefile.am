@@ -28,7 +28,9 @@ DEP_LIBS = \
    ./ThirdParty/LZSS/libhw_LZSS.a
 
 homeworld_LIBTOOLFLAGS = --preserve-dup-deps
-homeworld_LDADD = $(HW_LIBS) $(DEP_LIBS) @SDL_LIBS@ $(MOVIE_LIBS) $(NET_LIBS)
+
+# Leave SDL first - needed for lookup of SDL_main
+homeworld_LDADD = -lSDL $(HW_LIBS) $(DEP_LIBS) @SDL_LIBS@ $(MOVIE_LIBS) $(NET_LIBS)
 if WII
 homeworld_LDADD +=
 else
