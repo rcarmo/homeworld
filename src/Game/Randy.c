@@ -63,7 +63,6 @@ udword ranRandomFn(sdword ranIndex)
     ranstream *stream;
 
 #if RANDOM_DEBUG_CALL_SEQ
-    char *fileNameFull;
     char *truncatedFile;
     FILE *fp;
 
@@ -75,7 +74,8 @@ udword ranRandomFn(sdword ranIndex)
         }
         if (ranLogIndex >= RANDOM_LOG_BUFFER_LENGTH)
         {
-            fileNameFull = filePathPrepend(RANDOM_LOG_FILE, FF_UserSettingsPath);
+        	char fileNameFull[PATH_MAX];
+            filePathPrepend(RANDOM_LOG_FILE, FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
 
             if (fileMakeDestinationDirectory(fileNameFull))
             {
@@ -243,13 +243,14 @@ void ranStartup(void)
 void ranShutdown(void)
 {
 #if RANDOM_DEBUG_CALL_SEQ
-    char *fileNameFull;
+    
     FILE *fp;
     sdword index;
 
     if (ranLogBuffer != NULL)
     {
-        fileNameFull = filePathPrepend(RANDOM_LOG_FILE, FF_UserSettingsPath);
+    	char fileNameFull[PATH_MAX];
+        filePathPrepend(RANDOM_LOG_FILE, FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
 
         if (fileMakeDestinationDirectory(fileNameFull))
         {

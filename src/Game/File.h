@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 
+#define G_N_ELEMENTS(arr)		(sizeof (arr) / sizeof ((arr)[0]))
+
 #include "BigFile.h"
 
 /*=============================================================================
@@ -96,14 +98,11 @@ extern char fileHomeworldDataPath [];
 extern char fileUserSettingsPath  [];
 extern char fileOverrideBigPath   [];
 extern char fileCDROMPath         [];
-extern char filePathTempBuffer    [];
-
 
 /*=============================================================================
     Functions:
 =============================================================================*/
-
-char *filePathPrepend(char *fileName, udword flags);
+void filePathPrepend(char *fileName, udword flags, char* buffer, size_t buffer_length);
 void fileNameReplaceSlashesInPlace(char *fileName);
 
 void fileCDROMPathSet(char *path);

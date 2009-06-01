@@ -135,7 +135,6 @@ void demBlockWrite(void *data, sdword length)
 ----------------------------------------------------------------------------*/
 void demRecordStart(char *fileName, demstatesave saveFunction)
 {
-    char *fullFileName;
     demoheader header;
     ubyte *stateBuffer;
 #if DEM_RANDY_SAVE
@@ -165,9 +164,8 @@ void demRecordStart(char *fileName, demstatesave saveFunction)
     }
 
     //open the file         (actually, delete it, and every time we will open it in append write mode)
-    fullFileName = filePathPrepend(fileName, FF_UserSettingsPath);
-    strcpy(demFileSaveName, fullFileName);
-    remove(fullFileName);
+    filePathPrepend(fileName, FF_UserSettingsPath, demFileSaveName, G_N_ELEMENTS(demFileSaveName));
+    remove(demFileSaveName);
 
     demBlockWrite(&header, sizeof(header));
     if (header.initialStateSize > 0)
@@ -178,8 +176,8 @@ void demRecordStart(char *fileName, demstatesave saveFunction)
 #if DEM_CHECKSUM
     if (logEnable == LOG_VERBOSE)
     {
-        char *demLogFileNameFull = filePathPrepend(
-            DEM_LogFileName, FF_UserSettingsPath);
+        char demLogFileNameFull[PATH_MAX];
+        filePathPrepend(DEM_LogFileName, FF_UserSettingsPath, demLogFileNameFull, G_N_ELEMENTS(demLogFileNameFull));
         if (fileMakeDestinationDirectory(demLogFileNameFull))
         {
             netlogfile = fopen(demLogFileNameFull, "wb");
@@ -217,8 +215,8 @@ void demStateSave(void)
     {
         if (logEnable == LOG_VERBOSE)
         {
-            char *demLogFileNameFull = filePathPrepend(
-                DEM_LogFileName, FF_UserSettingsPath);
+            char demLogFileNameFull[PATH_MAX];
+            filePathPrepend(DEM_LogFileName, FF_UserSettingsPath, demLogFileNameFull, G_N_ELEMENTS(demLogFileNameFull));
             if (fileMakeDestinationDirectory(demLogFileNameFull))
             {
                 netlogfile = fopen(demLogFileNameFull, "at");
@@ -377,8 +375,8 @@ void demPlayStart(char *fileName, demstateload loadFunction, demplayfinished fin
 #if DEM_CHECKSUM
     if (logEnable == LOG_VERBOSE)
     {
-        char *demLogFileNameFull = filePathPrepend(
-            DEM_LogFileName, FF_UserSettingsPath);
+        char demLogFileNameFull[PATH_MAX];
+        filePathPrepend(DEM_LogFileName, FF_UserSettingsPath, demLogFileNameFull, G_N_ELEMENTS(demLogFileNameFull));
         if (fileMakeDestinationDirectory(demLogFileNameFull))
         {
             netlogfile = fopen(demLogFileNameFull, "wb");
@@ -452,8 +450,8 @@ void demStateLoad(void)
         nDemoPlays++;
         if (logEnable == LOG_VERBOSE)
         {
-            char *demLogFileNameFull = filePathPrepend(
-                DEM_LogFileName, FF_UserSettingsPath);
+            char demLogFileNameFull[PATH_MAX];
+            filePathPrepend(DEM_LogFileName, FF_UserSettingsPath, demLogFileNameFull, G_N_ELEMENTS(demLogFileNameFull));
             if (fileMakeDestinationDirectory(demLogFileNameFull))
             {
                 netlogfile = fopen(demLogFileNameFull, "at");

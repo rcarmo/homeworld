@@ -3035,14 +3035,12 @@ void universeStaticInit(void)
     StaticInfo *staticinfo;
     udword max,count;
 #if UNIV_SHIP_LOADFREE_LOG
-    char *fileNameFull;
     FILE *logFile = NULL;
 
     if (univLoadFreeLog)
     {
-        fileNameFull = filePathPrepend(
-            UNIV_LOAD_FREE_FILENAME,
-            FF_UserSettingsPath);
+    	char fileNameFull[PATH_MAX];
+        filePathPrepend(UNIV_LOAD_FREE_FILENAME, FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
 
         if (fileMakeDestinationDirectory(fileNameFull))
             logFile = fopen(fileNameFull, "at");

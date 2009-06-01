@@ -489,8 +489,7 @@ void hrChooseRandomBitmap(char *pFilenameBuffer)
     // Remember the current directory
     getcwd(CurDir, PATH_MAX);
 
-    NewDir[0] = 0;
-    strcpy(NewDir, filePathPrepend("ScreenShots", FF_UserSettingsPath));
+    filePathPrepend("ScreenShots", FF_UserSettingsPath, NewDir, G_N_ELEMENTS(NewDir));
 
     // Prefer user screenshots over pre-saved ones; they're more likely to be 
     // at a higher resolution, not to mention more interesting...
@@ -587,7 +586,10 @@ void hrChooseRandomBitmap(char *pFilenameBuffer)
                     continue;
                 }
 
-                strcat(pFilenameBuffer, filePathPrepend("ScreenShots/", FF_UserSettingsPath));
+				char buffer[PATH_MAX];
+				filePathPrepend("ScreenShots/", FF_UserSettingsPath, buffer,  G_N_ELEMENTS(buffer));
+#warning This code needs some more work - just catenating without checking for size is evil
+                strcat(pFilenameBuffer, buffer);
                 strcat(pFilenameBuffer, dir_entry->d_name);
                 
                 break;

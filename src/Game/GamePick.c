@@ -278,7 +278,9 @@ sdword gpCountTrainingSavegames(void)
         handle = _findnext(startHandle, &find);
     }
 #else
-    dp = opendir(filePathPrepend(fileSearch, FF_UserSettingsPath));
+	char temp[PATH_MAX];
+	filePathPrepend(fileSearch, FF_UserSettingsPath, temp, G_N_ELEMENTS(temp));
+    dp = opendir(temp);
     if (!dp)
         return 0;
 
@@ -375,7 +377,9 @@ alreadyLoaded:;
         handle = _findnext(startHandle, &find);
     }
 #else
-    dp = opendir(filePathPrepend(fileSearch, FF_UserSettingsPath));
+	char temp[PATH_MAX];
+	filePathPrepend(fileSearch, FF_UserSettingsPath, temp, G_N_ELEMENTS(temp));
+    dp = opendir(temp);
 
     if (dp)
     {

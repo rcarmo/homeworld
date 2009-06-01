@@ -4368,7 +4368,6 @@ void trNoPalFilter(sdword bEnable, sdword handle)
 #if TR_TEXTURE_USAGE
 void trTextureUsageList(char *fileName)
 {
-    char *fileNameFull;
     FILE *fp;
     char directoryName[256], *pSlash;
     sdword index = 0;
@@ -4397,8 +4396,9 @@ void trTextureUsageList(char *fileName)
             break;
         }
     }
-
-    fileNameFull = filePathPrepend(fileName, FF_UserSettingsPath);
+	
+	char fileNameFull[PATH_MAX];
+    filePathPrepend(fileName, FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
 
     if (!fileMakeDestinationDirectory(fileNameFull))
         return;

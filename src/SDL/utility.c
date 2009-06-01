@@ -3637,7 +3637,8 @@ char* utyGameSystemsPreInit(void)
         // Check to see if fileHomeworldDataPath is set
         if (fileHomeworldDataPath[0] == '\0')
         {
-            getcwd(filePathTempBuffer, PATH_MAX);
+        	char filePathTempBuffer[PATH_MAX];
+            getcwd(filePathTempBuffer, G_N_ELEMENTS(filePathTempBuffer));
             dataPath = filePathTempBuffer;
 
             fileHomeworldDataPathSet(dataPath);
@@ -3701,7 +3702,8 @@ char* utyGameSystemsPreInit(void)
         
 		if (homeDir != NULL)
 		{
-			snprintf(filePathTempBuffer, PATH_MAX, "%s/" CONFIGDIR, homeDir);
+			char filePathTempBuffer[PATH_MAX];
+			snprintf(filePathTempBuffer, G_N_ELEMENTS(filePathTempBuffer), "%s/" CONFIGDIR, homeDir);
 			fileUserSettingsPathSet(filePathTempBuffer);
 		}
 		else

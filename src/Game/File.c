@@ -80,10 +80,6 @@ char fileUserSettingsPath  [PATH_MAX] = "";
 // where the CD ROM drive is mounted
 char fileCDROMPath         [PATH_MAX] = "";
 
-// temporary path manipulation working area
-char filePathTempBuffer    [PATH_MAX] = "";
-
-
 //  space required for opening and reading from compressed streams within a bigfile
 #define decompWorkspaceIncrement 65536;
 static char  *decompWorkspaceP     = NULL;
@@ -814,8 +810,7 @@ bool8 fileMakeDestinationDirectory (const char* fileName)
 ----------------------------------------------------------------------------*/
 sdword fileLoadAlloc(char *_fileName, void **address, udword flags)
 {
-    char  *memoryName = NULL,
-          *fileName   = NULL;
+    char  *memoryName = NULL;
     FILE  *inFile     = NULL;
     
     bigFileConfiguration *whereFound = NULL;
@@ -847,8 +842,8 @@ sdword fileLoadAlloc(char *_fileName, void **address, udword flags)
     }
 
     // filesystem load
-
-    fileName = filePathPrepend(_fileName, flags);           //get full path
+	char fileName[PATH_MAX];
+	filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
     fileNameCorrectCase(fileName);
 
     nameLength = strlen(fileName);                          //set memory name to the
@@ -911,7 +906,6 @@ sdword fileLoadAlloc(char *_fileName, void **address, udword flags)
 ----------------------------------------------------------------------------*/
 sdword fileLoad(char *_fileName, void *address, udword flags)
 {
-    char  *fileName   = NULL;
     FILE  *inFile     = NULL;
     
     bigFileConfiguration *whereFound = NULL;
@@ -940,8 +934,8 @@ sdword fileLoad(char *_fileName, void *address, udword flags)
     }
 
     // filesystem
-
-    fileName = filePathPrepend(_fileName, flags);            //get full path
+	char fileName[PATH_MAX];
+	filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
     fileNameCorrectCase(fileName);
 
     length = fileSizeGet(_fileName, flags);                  //get length of file
@@ -982,10 +976,10 @@ sdword fileLoad(char *_fileName, void *address, udword flags)
 sdword fileSave(char *_fileName, void *address, sdword length)
 {
     FILE *outFile;
-    char *fileName;
+    char fileName[PATH_MAX];
     sdword lengthWrote;
 
-    fileName = filePathPrepend(_fileName, FF_UserSettingsPath);    //get full path
+    filePathPrepend(_fileName, FF_UserSettingsPath, fileName, G_N_ELEMENTS(fileName));    //get full path
     fileNameCorrectCase(fileName);
 
     if (!fileMakeDestinationDirectory(fileName))
@@ -1045,7 +1039,7 @@ bool fileExistsInBigFile(char *fileName)
 ----------------------------------------------------------------------------*/
 bool fileExists(char *_fileName, udword flags)
 {
-    char *fileName;
+    char fileName[PATH_MAX];
 
     if (!IgnoreBigfiles && !bitTest(flags, FF_CDROM|FF_IgnoreBIG|FF_UserSettingsPath))
     {
@@ -1055,7 +1049,7 @@ bool fileExists(char *_fileName, udword flags)
         }
     }
 
-    fileName = filePathPrepend(_fileName, flags);            //get full path
+    filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
 
     if (fileNameCorrectCase(fileName))
     {
@@ -1079,7 +1073,6 @@ sdword fileSizeGet(char *_fileName, udword flags)
 {
     FILE *file;
     sdword length;
-    char *fileName;
 
     if (!IgnoreBigfiles && !bitTest(flags, FF_CDROM|FF_IgnoreBIG|FF_UserSettingsPath))
     {
@@ -1096,8 +1089,8 @@ sdword fileSizeGet(char *_fileName, udword flags)
             return length;
         }
     }
-
-    fileName = filePathPrepend(_fileName, flags);            //get full path
+	char fileName[PATH_MAX];
+	filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
     fileNameCorrectCase(fileName);
 
     if ((file = fopen(fileName, "rb")) == NULL)              //open the file
@@ -1116,9 +1109,9 @@ sdword fileSizeGet(char *_fileName, udword flags)
 
 void fileDelete(char *_fileName)
 {
-    char *fileName;
+    char fileName[PATH_MAX];
 
-    fileName = filePathPrepend(_fileName, FF_IgnorePrepend);    //get full path
+    filePathPrepend(_fileName, FF_IgnorePrepend, fileName, G_N_ELEMENTS(fileName));    //get full path
     fileNameReplaceSlashesInPlace(fileName);
 
     remove(fileName);
@@ -1136,7 +1129,6 @@ filehandle fileOpen(char *_fileName, udword flags)
 {
     FILE *file;
     char access[3];
-    char *fileName;
     char localPath[PATH_MAX] = "";
     filehandle fh;
     bool usingBigfile    = FALSE;
@@ -1173,10 +1165,9 @@ filehandle fileOpen(char *_fileName, udword flags)
     // otherwise try a local filesystem version
     else
     {
-        filePathPrepend(_fileName, FF_NoModifers);  // this ends up with the override path...
-        strcpy(localPath, filePathTempBuffer);
+        filePathPrepend(_fileName, FF_NoModifers, localPath, G_N_ELEMENTS(localPath));  // this ends up with the override path...
     }
-    
+
     // don't fiddle with the path any more - we should have an explicit full path
     // at this point; the question is does a file exist there?
     localFileExists = fileExists(localPath, FF_IgnorePrepend);
@@ -1288,8 +1279,8 @@ filehandle fileOpen(char *_fileName, udword flags)
     }
 
     // resort to the good old disk filesystem
-
-    fileName = filePathPrepend(_fileName, flags);            //get full path
+	char fileName[PATH_MAX];
+    filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName));            //get full path
     fileNameCorrectCase(fileName);
 
     if (bitTest(flags, FF_AppendMode))
@@ -1858,43 +1849,60 @@ void filePathMaxBufferSet(char *buffer, char *path)
     fileNameReplaceSlashesInPlace(buffer);
 }
 
+int buffer_length_sufficient(size_t string_length, size_t buffer_length)
+{
+	return string_length + 1 <= buffer_length;
+}
 
 /*-----------------------------------------------------------------------------
     Name        : filePathPrepend
     Description : Prepend the default path for opening files.
     Inputs      : fileName - file name/relative path to add to end of default path
                   flags    - flags to set the root directory we want
+                  buffer   - buffer to work on
+                  buf size - length (in char) of buffer
     Outputs     : Copies prepend path to global variable and concatenates fileName
     Return      : pointer to new full path
 ----------------------------------------------------------------------------*/
-char *filePathPrepend(char *fileName, udword flags)
-{
+void filePathPrepend(char *fileName, udword flags, char* buffer, size_t buffer_length)
+{	
     dbgAssertOrIgnore(fileName != NULL);
+    dbgAssertOrIgnore(buffer != NULL);
+    dbgAssertOrIgnore(buffer_length > 1);
+
+	size_t fileNameLength = strlen(fileName);
+	
+	*buffer = '\0';
+	
+	//check first whether file can be copied into buffer
+	if(fileNameLength + 1 > buffer_length)
+		return; 
+
+	char* path = NULL;
 
     if (bitTest(flags, FF_IgnorePrepend))
     {
-        strcpy(filePathTempBuffer, "");
+		path = NULL;
     }
     else if (bitTest(flags, FF_HomeworldDataPath))
     {
-        strcpy(filePathTempBuffer, fileHomeworldDataPath);
+		path = fileHomeworldDataPath;
     }
     else if (bitTest(flags, FF_UserSettingsPath))
     {
-        strcpy(filePathTempBuffer, fileUserSettingsPath);
+		path = fileUserSettingsPath;
     }
     else if (bitTest(flags, FF_CDROM))
     {
-        strcpy(filePathTempBuffer, fileCDROMPath);
+		path = fileCDROMPath;
     }
     else
     {
-        strcpy(filePathTempBuffer, fileOverrideBigPath);
+        path = fileOverrideBigPath;
     }
     
-    strcat(filePathTempBuffer, fileName);
-
-    return filePathTempBuffer;
+    if(path && buffer_length_sufficient(strlen(path) + fileNameLength, buffer_length))
+    		sprintf(buffer, "%s%s", path, fileName);
 }
 
 void fileCDROMPathSet(char *path)

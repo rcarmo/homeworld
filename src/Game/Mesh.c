@@ -1565,10 +1565,10 @@ void meshObjectOutput(polygonobject* object, materialentry* materials, sdword iC
 {
     sdword iPoly;
     polyentry* polygon;
-    char *fileNameFull;
+    char fileNameFull[PATH_MAX];
     FILE* out;
 
-    fileNameFull = filePathPrepend("uv.txt", FF_UserSettingsPath);
+    filePathPrepend("uv.txt", FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
 
     if (!fileMakeDestinationDirectory(fileNameFull))
         return;

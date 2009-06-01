@@ -140,9 +140,9 @@ lodinfo *lodTableReadScript(char *directory, char *fileName)
 #if LOD_AUTO_SAVE
     {
         char partialName[PATH_MAX];
-        char *fullName;
         sprintf(partialName, "%s%s", directory, fileName);
-        fullName = filePathPrepend(partialName, FF_IgnorePrepend);
+        char fullName[PATH_MAX];
+        filePathPrepend(partialName, FF_IgnorePrepend, fullName, G_N_ELEMENTS(fullName));
         info->fileName = memStringDupe(fullName);           //store full path to file for saving
     }
 #endif
@@ -450,10 +450,10 @@ sdword lodAutoSave(lodinfo *LOD)
     sdword level;
     FILE *fp;
     char *filePath;
-    char *lodFileNameFull;
+    char lodFileNameFull[PATH_MAX];
     real32 baseScalar = 1.0f, stripeScalar = 1.0f;
 
-    lodFileNameFull = filePathPrepend(LOD->fileName, FF_UserSettingsPath);
+    filePathPrepend(LOD->fileName, FF_UserSettingsPath, lodFileNameFull, G_N_ELEMENTS(lodFileNameFull));
 
     if (!fileMakeDestinationDirectory(lodFileNameFull))
     {

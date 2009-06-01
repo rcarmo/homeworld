@@ -177,7 +177,7 @@ void autodownloadmapGetFilesOfMap(void)
     {
         GetExactMapDirNames(i);
 
-        strcpy(dir, filePathPrepend(autodownloadmapInfo.exactdirname,0));
+        filePathPrepend(autodownloadmapInfo.exactdirname,0, dir, G_N_ELEMENTS(dir));
 #ifdef _WIN32
         strcat(dir,"\\*.*");
 

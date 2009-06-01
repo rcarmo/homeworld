@@ -314,11 +314,12 @@ char *dbgStackDump(void)
         }
     }
 
-    blankPtr = filePathPrepend(dbgStackFilename, FF_UserSettingsPath);
-    if (!fileMakeDestinationDirectory(blankPtr))
+	char fileName[PATH_MAX];
+    filePathPrepend(dbgStackFilename, FF_UserSettingsPath, fileName, G_N_ELEMENTS(fileName));
+    if (!fileMakeDestinationDirectory(fileName))
         return NULL;
 
-    fp = fopen(blankPtr, "wb");                             //open the dump file
+    fp = fopen(fileName, "wb");                             //open the dump file
     if (fp == NULL)
     {
         return(NULL);

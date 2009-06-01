@@ -2487,8 +2487,7 @@ bool bigOpenAllBigFiles(void)
 
     for (bigfile_i = 0; bigfile_i < NUMBER_CONFIGURED_BIG_FILES; ++bigfile_i)
     {
-        strcpy(bigFilePath,
-               filePathPrepend(bigFilePrecedence[bigfile_i].bigFileName, FF_HomeworldDataPath));
+		filePathPrepend(bigFilePrecedence[bigfile_i].bigFileName, FF_HomeworldDataPath, bigFilePath, G_N_ELEMENTS(bigFilePath));
         
         if (!fileExists(bigFilePath, FF_IgnorePrepend))
         {
@@ -2505,7 +2504,7 @@ bool bigOpenAllBigFiles(void)
         {
             if (bigFilePrecedence[bigfile_i].required)
             {
-                dbgFatalf(DBG_Loc, "Unable to open required .big file: %s", filePathTempBuffer);
+                dbgFatalf(DBG_Loc, "Unable to open required .big file: %s", bigFilePath);
             }
             else
             {
@@ -2517,7 +2516,7 @@ bool bigOpenAllBigFiles(void)
         {
             if (bigFilePrecedence[bigfile_i].required)
             {
-                dbgFatalf(DBG_Loc, "Incompatible version for required .big file: %s", filePathTempBuffer);
+                dbgFatalf(DBG_Loc, "Incompatible version for required .big file: %s", bigFilePath);
             }
         }
 

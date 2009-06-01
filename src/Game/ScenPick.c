@@ -540,7 +540,9 @@ alreadyLoadedFromFileSystem:;
     }
 #else   /* File search, not _WIN32... */
 
-    dp = opendir(filePathPrepend("MultiPlayer", FF_HomeworldDataPath));
+	char temp[PATH_MAX];
+	filePathPrepend("MultiPlayer", FF_HomeworldDataPath, temp, G_N_ELEMENTS(temp));
+    dp = opendir(temp);
 
     if (dp)
     {
@@ -570,7 +572,8 @@ alreadyLoadedFromFileSystem:;
             if (fileName[0] == '\0')
                 continue;
 
-            title = spTitleFind(filePathPrepend("MultiPlayer", FF_HomeworldDataPath), dir_entry->d_name);
+			filePathPrepend("MultiPlayer", FF_HomeworldDataPath, temp, G_N_ELEMENTS(temp));
+            title = spTitleFind(temp, dir_entry->d_name);
             if (title == NULL)
             {
                 continue;

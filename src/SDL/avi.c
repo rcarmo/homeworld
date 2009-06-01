@@ -756,7 +756,7 @@ dbgMessage("aviPlay:Entering");
 
 //TODO  Include Windows file structure. 
 
-    strcpy(fullname, filePathPrepend(filename, FF_HomeworldDataPath));
+    filePathPrepend(filename, FF_HomeworldDataPath, fullname, G_N_ELEMENTS(fullname));
 
     //try Homeworld\Data\Movies first
     if (!aviStart(fullname))

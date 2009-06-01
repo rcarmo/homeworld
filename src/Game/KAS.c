@@ -794,11 +794,11 @@ if (y > MAIN_WindowHeight - 2*rowHeight)    \
 void kasTakeADump(void)
 {
     FILE *fp;
-    char fileName[256] = "StatusDump.txt", *fullName;
+    char fileName[256] = "StatusDump.txt", fullName[PATH_MAX];
     udword i, remaining;
     Timer *tp;
 
-    fullName = filePathPrepend(fileName, FF_UserSettingsPath);
+    filePathPrepend(fileName, FF_UserSettingsPath, fullName, G_N_ELEMENTS(fullName));
 
     if (!fileMakeDestinationDirectory(fullName))
         return;

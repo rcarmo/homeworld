@@ -485,10 +485,10 @@ void rndGLStateLogFunction(char *location)
     GLboolean bools[MAX_BOOLS];
     char totalString[256];
     char valueString[128];
-    char *fileNameFull;
+    char fileNameFull[PATH_MAX];
     FILE *f;
 
-    fileNameFull = filePathPrepend(rndGLStateLogFileName, FF_UserSettingsPath);
+    filePathPrepend(rndGLStateLogFileName, FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
 
     if (!fileMakeDestinationDirectory(fileNameFull))
     {
@@ -3962,8 +3962,7 @@ DEFINE_TASK(rndRenderTask)
 
 #if RND_GL_STATE_DEBUG
         if (keyIsHit(GKEY) && keyIsStuck(LKEY))
-        {                                                   //if starting a new round of state saving
-            static char *fileNameFull;
+        {                                                   //if starting a new round of state saving            
             static FILE *f;
             keyClearSticky(LKEY);
             rndGLStateSaving = TRUE;
@@ -3976,9 +3975,9 @@ DEFINE_TASK(rndRenderTask)
                 sprintf(rndGLStateLogFileName, "gl%d.state", rndGLStateLogIndex);
             }
             rndGLStateLogIndex++;
-
-            fileNameFull = filePathPrepend(
-                rndGLStateLogFileName, FF_UserSettingsPath);
+			
+			char fileNameFull[PATH_MAX];
+			filePathPrepend(rndGLStateLogFileName, FF_UserSettingsPath, fileNameFull, G_N_ELEMENTS(fileNameFull));
             if (fileMakeDestinationDirectory(fileNameFull))
             {
                 f = fopen(fileNameFull, "wt");              //open the file to clean it out

@@ -77,14 +77,14 @@ static void _ssAppendScreenshotFilename(char* savePath)
 
 static void _ssSaveScreenshot(ubyte* buf)
 {
-    char *fname;
+    char fname[PATH_MAX];
     FILE* out;
     unsigned char *pTempLine;
     long Top, Bot, i, Size;
 
     JPEGDATA jp;
 
-    fname = filePathPrepend("ScreenShots/", FF_UserSettingsPath);
+    filePathPrepend("ScreenShots/", FF_UserSettingsPath, fname, G_N_ELEMENTS(fname));
     if (!fileMakeDirectory(fname))
         return;
 
