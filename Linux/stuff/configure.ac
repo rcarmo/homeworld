@@ -51,8 +51,9 @@ AM_PATH_SDL($SDL_VERSION,
 dnl Configure options for building Raiders version.
 AC_ARG_ENABLE(raiders,
 	AS_HELP_STRING([--enable-raiders],[build a Raiders Retreat binary for Homeworld]),
-	enable_raiders=yes)
-if test "x$enable_raiders" = "xyes" ; then
+	enable_raiders=${enableval},
+	enable_raiders=no)
+if test "x$enable_raiders" = "xyes" || test "x$enable_raiders" = "x" ; then
 	echo "* Building Raiders Retreat binary for Homeworld (HW_GAME_RAIDER_RETREAT) *"
 	HWGAME_CFLAGS="-DHW_GAME_RAIDER_RETREAT"
 fi
