@@ -1830,21 +1830,24 @@ FILE *fileStream(filehandle handle)
     Outputs     : 
     Return      :
 ----------------------------------------------------------------------------*/
-void filePathMaxBufferSet(char *buffer, char *path)
-{
-    unsigned int path_len = 0;
-    
+void filePathMaxBufferSet(char *buffer, size_t buffer_length, const char *path)
+{   
     dbgAssertOrIgnore(buffer != NULL);
     dbgAssertOrIgnore(path   != NULL);
     
-    path_len = strlen(path);
+    unsigned int path_len = strlen(path);
 
-    dbgAssertOrIgnore(path_len < PATH_MAX);
-
-    strncpy(buffer, path, PATH_MAX);
-    
-    // make sure path is delimited
-    strcat(buffer, "/");
+	if(path[path_len - 1] == '/')
+	{
+		dbgAssertOrIgnore(path_len < buffer_length);  
+		strncpy(buffer, path, buffer_length); 
+	}
+	else
+    {
+    	dbgAssertOrIgnore(path_len < buffer_length - 1);
+		// make sure path is delimited
+		snprintf(buffer, buffer_length, "%s/", path);
+    }
     
     fileNameReplaceSlashesInPlace(buffer);
 }
@@ -1917,22 +1920,22 @@ void fileCDROMPathSet(char *path)
         return FALSE;
     }
 #endif
-    filePathMaxBufferSet(fileCDROMPath, path);
+    filePathMaxBufferSet(fileCDROMPath, G_N_ELEMENTS(fileCDROMPath), path);
 }
 
 void fileHomeworldDataPathSet(char *path)
 {
-    filePathMaxBufferSet(fileHomeworldDataPath, path);
+    filePathMaxBufferSet(fileHomeworldDataPath, G_N_ELEMENTS(fileHomeworldDataPath), path);
 }
 
 void fileOverrideBigPathSet(char *path)
 {
-    filePathMaxBufferSet(fileOverrideBigPath, path);
+    filePathMaxBufferSet(fileOverrideBigPath, G_N_ELEMENTS(fileOverrideBigPath), path);
 }
 
 void fileUserSettingsPathSet(char *path)
 {
-    filePathMaxBufferSet(fileUserSettingsPath, path);
+    filePathMaxBufferSet(fileUserSettingsPath, G_N_ELEMENTS(fileUserSettingsPath), path);
 }
 
 
