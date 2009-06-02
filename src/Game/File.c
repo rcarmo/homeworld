@@ -845,7 +845,11 @@ sdword fileLoadAlloc(char *_fileName, void **address, udword flags)
     // filesystem load
 	char fileName[PATH_MAX];
 	filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
-    fileNameCorrectCase(fileName);
+    
+    if(!fileNameCorrectCase(fileName))
+    {
+    	dbgFatalf(DBG_Loc, "fileLoadAlloc: coundn't find file %s", fileName);
+    }
 
     nameLength = strlen(fileName);                          //set memory name to the
     dbgAssertOrIgnore(nameLength > 1);                              //end of the filename if filename too long
@@ -937,7 +941,10 @@ sdword fileLoad(char *_fileName, void *address, udword flags)
     // filesystem
 	char fileName[PATH_MAX];
 	filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
-    fileNameCorrectCase(fileName);
+    if(!fileNameCorrectCase(fileName))
+    {
+        dbgFatalf(DBG_Loc, "fileLoadAlloc: couldn't find file %s", fileName);
+    }   
 
     length = fileSizeGet(_fileName, flags);                  //get length of file
 
@@ -1092,12 +1099,17 @@ sdword fileSizeGet(char *_fileName, udword flags)
     }
 	char fileName[PATH_MAX];
 	filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
-    fileNameCorrectCase(fileName);
-
-    if ((file = fopen(fileName, "rb")) == NULL)              //open the file
+    
+    if (!fileNameCorrectCase(fileName))
     {
         dbgFatalf(DBG_Loc, "fileSizeGet: can't find file '%s'.", fileName);
     }
+    
+    if ((file = fopen(fileName, "rb")) == NULL)              //open the file
+    {
+    	dbgFatalf(DBG_Loc, "fileSizeGet: can't open file '%s'.", fileName);
+    }
+    
     length = fseek(file, 0, SEEK_END);                      //get length of file
     dbgAssertOrIgnore(length == 0);
     length = ftell(file);
