@@ -808,6 +808,7 @@ bool8 fileMakeDestinationDirectory (const char* fileName)
     Note        : Generates a fatal error if file doesn't exist.  If you don't
         like this behavior, call fileExists() first.
 ----------------------------------------------------------------------------*/
+#warning Rework fileLoadAlloc: it should not generate a fatal error - let caller decide what to do! 
 sdword fileLoadAlloc(char *_fileName, void **address, udword flags)
 {
     char  *memoryName = NULL;
