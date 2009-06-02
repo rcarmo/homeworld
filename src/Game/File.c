@@ -1059,12 +1059,7 @@ bool fileExists(char *_fileName, udword flags)
 
     filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName)); //get full path
 
-    if (fileNameCorrectCase(fileName))
-    {
-        return TRUE;
-    }
-
-    return FALSE;
+    return fileNameCorrectCase(fileName);
 }
 
 /*-----------------------------------------------------------------------------
