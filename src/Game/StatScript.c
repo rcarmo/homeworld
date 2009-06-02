@@ -860,7 +860,7 @@ void scriptSet(char *directory,char *filename,scriptEntry info[])
 
     for (;;)
     {
-        status = fileLineRead(fh,line,MAX_LINE_CHARS);
+        status = fileLineRead(fh,line,G_N_ELEMENTS(line));
 
         if (status == FR_EndOfFile)
         {
