@@ -1883,11 +1883,9 @@ void filePathPrepend(char *fileName, udword flags, char* buffer, size_t buffer_l
 
 	size_t fileNameLength = strlen(fileName);
 	
-	*buffer = '\0';
-	
 	//check first whether file can be copied into buffer
-	if(fileNameLength + 1 > buffer_length)
-		return; 
+	
+	dbgAssertOrIgnore(fileNameLength <= buffer_length - 1);
 
 	char* path = NULL;
 
@@ -1912,8 +1910,7 @@ void filePathPrepend(char *fileName, udword flags, char* buffer, size_t buffer_l
         path = fileOverrideBigPath;
     }
     
-    if(path && buffer_length_sufficient(strlen(path) + fileNameLength, buffer_length))
-    		sprintf(buffer, "%s%s", path, fileName);
+    snprintf(buffer, buffer_length, "%s%s", path ? path : "", fileName);
 }
 
 void fileCDROMPathSet(char *path)
