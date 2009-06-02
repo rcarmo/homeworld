@@ -988,7 +988,7 @@ sdword fileSave(char *_fileName, void *address, sdword length)
     sdword lengthWrote;
 
     filePathPrepend(_fileName, FF_UserSettingsPath, fileName, G_N_ELEMENTS(fileName));    //get full path
-    fileNameCorrectCase(fileName);
+    fileNameCorrectCase(fileName); //file not found is ignored on purpose
 
     if (!fileMakeDestinationDirectory(fileName))
     {
@@ -1289,7 +1289,7 @@ filehandle fileOpen(char *_fileName, udword flags)
     // resort to the good old disk filesystem
 	char fileName[PATH_MAX];
     filePathPrepend(_fileName, flags, fileName, G_N_ELEMENTS(fileName));            //get full path
-    fileNameCorrectCase(fileName);
+    fileNameCorrectCase(fileName); //file not found is ignored on purpose
 
     if (bitTest(flags, FF_AppendMode))
     {
