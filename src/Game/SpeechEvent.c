@@ -441,11 +441,10 @@ sdword speechEventInit(void)
 #endif
 
     /* load the speech lookup tables */
-    strcpy(loadfile, SOUNDFXDIR);
 #ifdef HW_GAME_DEMO
-    strcat(loadfile, "DLsentence.lut");
+    snprintf(loadfile, G_N_ELEMENTS(loadfile), "%s%s", SOUNDFXDIR, "DLsentence.lut");    
 #else
-    strcat(loadfile, "speechsentence_comp.lut");
+	snprintf(loadfile, G_N_ELEMENTS(loadfile), "%s%s", SOUNDFXDIR, "speechsentence_comp.lut");
 #endif
     fileLoadAlloc(loadfile, (void**)&SentenceLUT, NonVolatile);
 
@@ -468,11 +467,10 @@ sdword speechEventInit(void)
 	}
 #endif // FIX_ENDIAN
 	
-    strcpy(loadfile, SOUNDFXDIR);
 #ifdef HW_GAME_DEMO
-    strcat(loadfile, "DLphrase.lut");
+	snprintf(loadfile, G_N_ELEMENTS(loadfile), "%s%s", SOUNDFXDIR, "DLphrase.lut");
 #else
-    strcat(loadfile, "speechphrase_comp.lut");
+	snprintf(loadfile, G_N_ELEMENTS(loadfile), "%s%s", SOUNDFXDIR, "speechphrase_comp.lut");
 #endif
     fileLoadAlloc(loadfile, (void**)&PhraseLUT, NonVolatile);
 
