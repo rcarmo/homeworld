@@ -319,6 +319,7 @@ void tbSensorsBegin(char* name, featom* atom)
 //this function doesn't actually draw anything, because each button is
 //drawn independently.  However, it does move the task bar up/down if needed.
 //!!! the motion will therefore be frame-rate dependent.!!!
+/*
 void tbButtonRegionDraw(featom *atom, regionhandle region)
 {
     sdword movement;
@@ -348,6 +349,8 @@ void tbButtonRegionDraw(featom *atom, regionhandle region)
         }
     }
 }
+*/
+
 void tbFleetManager(char *name, featom *atom)
 {
     feScreenStart(ghMainRegion, "Fleet_manager");
