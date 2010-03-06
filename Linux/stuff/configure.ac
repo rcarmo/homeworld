@@ -21,6 +21,7 @@ fi
 AC_LIBTOOL_DLOPEN
 AM_PROG_LIBTOOL
 
+AC_CHECK_HEADERS([sigc++-2.0/sigc++/sigc++.h])
 dnl Check if building on Windows (based off GTK+ 2.2.4 configure.in...I'm not
 dnl very familiar with autoconf).
 AC_MSG_CHECKING([if we're in Windows])
