@@ -6,7 +6,7 @@ AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([-Wall foreign dist-bzip2])
 
 AC_LIBTOOL_WIN32_DLL
-AC_PROG_CC
+AC_PROG_CXX
 if test "$CC" = :; then
   AC_MSG_ERROR([This package needs a C compiler.])
 fi
