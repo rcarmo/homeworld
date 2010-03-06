@@ -165,7 +165,7 @@ bool subAnyCardsOnScreen(void)
 
 /*-----------------------------------------------------------------------------
     Name        : subThemeColorSet
-    Description : Script-oarsing callback for setting a theme's color
+    Description : Script-parsing callback for setting a theme's color
     Inputs      :
     Outputs     :
     Return      :
