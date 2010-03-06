@@ -42,7 +42,11 @@
 #include "utility.h"
 
 #ifdef GENERIC_ETGCALLFUNCTION
+#ifdef _MACOSX_FIX_MISC
+#include "functions.h"
+#else
 #include "wrapped_functions.h"
+#endif
 #include "wrapped_unlisted_functions.h"
 #endif
 
@@ -2389,7 +2393,7 @@ void etgEffectDraw(Effect *effect)
             timeElapsed = universe.totaltimeelapsed - part->lastUpdated;
             if (timeElapsed >= 0)
             {
-                partUpdateSystem((psysPtr)effect->particleBlock[index], timeElapsed, &velInverse);
+				partUpdateSystem((psysPtr)effect->particleBlock[index], timeElapsed, &velInverse); //update the particle
                 part->lastUpdated = universe.totaltimeelapsed;
             }
 
@@ -2421,7 +2425,7 @@ void etgEffectDraw(Effect *effect)
                 glMultMatrixf((GLfloat*)&ownerCoordMatrix);
                 glMultMatrixf((GLfloat*)&coordMatrixX);
 
-                partRenderSystem((psysPtr)effect->particleBlock[index]);
+                partRenderSystem((psysPtr)effect->particleBlock[index]);  //render the particle
 
                 glPopMatrix();
             }
@@ -6275,10 +6279,6 @@ sdword etgFunctionCall(Effect *effect, struct etgeffectstatic *stat, ubyte *opco
 {
     udword param, nParams, returnType;
     sdword index;
-#ifdef _MACOSX_86
-	udword count = 0; // the number of times the for loop below is run.
-	udword offset; // the offset used when the parameter is placed above the stack pointer.
-#endif
 	etgfunctioncall *opptr = (etgfunctioncall *)opcode; //opcode pointer
 
 	
@@ -6286,12 +6286,11 @@ sdword etgFunctionCall(Effect *effect, struct etgeffectstatic *stat, ubyte *opco
     returnType = opptr->returnValue;
     for (index = (sdword)nParams - 1; index >= 0; index--) {		//for each parameter
 #ifdef _MACOSX_86
-		count++;								// add one to count each time the for loop runs
 		if (opptr->passThis) {					// check to see if more offset is needed becasue a 'this' pointer will also be passed.
-			offset = nParams*4 - count*4 + 4;	// compute the offset for parameter plus extra offset for a 'this' pointer.
+			offset = index*4 + 4; // compute the offset for parameter plus extra offset for a 'this' pointer.
 		}
 		else {
-			offset = nParams*4 - count*4;		// compute the offset for paramenter.
+			offset = index*4; // compute the offset for paramenter.
 		}
 #endif
 		param = opptr->parameter[index].param;
@@ -6328,10 +6327,18 @@ sdword etgFunctionCall(Effect *effect, struct etgeffectstatic *stat, ubyte *opco
             :
             : "a" (param) );
 #elif defined (_MACOSX_86)
-		__asm__ __volatile__ (								/* store parameters above the stack pointer */
-			"movl %0, (%%esp,%1)\n\t"						
-			:
-			: "a" (param), "r" (offset) );
+		
+//		__asm__ __volatile__ (								/* store parameters above the stack pointer */
+//			"movl %0, (%%esp,%1)\n\t"						
+//			:
+//			: "a" (param), "r" (offset) );
+		void *stackPointer;
+		__asm__ __volatile__ (
+			"movl %%esp, %0\n\t"
+			: "=r"(stackPointer)
+			:);
+		stackPointer += offset;
+		*stackPointer = param;
 #endif
     }// end of above for loop
 	
@@ -6349,10 +6356,16 @@ sdword etgFunctionCall(Effect *effect, struct etgeffectstatic *stat, ubyte *opco
             :
             : "a" (effect) );
 #elif defined (_MACOSX_86)
-		__asm__ __volatile__ (								/* pass a 'this' pointer */
-			"movl %0, (%%esp)\n\t"
-			:
-			: "a" (effect) );
+//		__asm__ __volatile__ (								/* pass a 'this' pointer */
+//			"movl %0, (%%esp)\n\t"
+//			:
+//			: "a" (effect) );
+		void *stackPointer;
+		__asm__ __volatile__ (
+			"movl %%esp, %0\n\t"
+			: "=r"(stackPointer)
+			:);
+		*stackPointer = effect;
 #endif
     }
     param = opptr->function();								//call the function

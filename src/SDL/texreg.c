@@ -3346,13 +3346,10 @@ void trMakeCurrent(trhandle handle)
     ubyte *newPalette;
     texreg *reg;
 
-#if defined (_X86_64) || defined (_MACOSX_86)
+#if defined (_X86_64) 
 	//
 	//GE01  Seem to be sent spurious texture handles due to the multiplayer options. 
 	// Print them then ignore them. :)  probably should wrap this further in build_for_debug tests.
-	//
-	// There is a similar problem on os x, where the same invalid handle is passed over and over again.
-	// this coencides hand in hand with explosions.
 	//
 	if (handle >= 6000){
 		dbgMessagef("trMakeCurrent: sent invalid handle: 0x%lx",handle);
