@@ -2108,7 +2108,7 @@ void singlePlayerPostInit(bool loadingSaveGame)
         {
             // doing this using relative missions probably doesn't make much
             // sense but I'm doing it anyway for consistency
-            animAviPlay(spGetPreviousMission(), spGetCurrentMission());
+            VideoPanel::Play(spGetPreviousMission(), spGetCurrentMission());
         }
     }
     //hyperspacetbbutton = tbButtonCreate("Hyperspace",spTaskBarHyperspaceCB,(ubyte *)0x00,0);
@@ -2555,7 +2555,7 @@ void singlePlayerGameUpdate()
                     if (spGetCurrentMission() < MISSION_4_GREAT_WASTELANDS_TRADERS)
 #endif
                     {
-                        animAviPlay(spGetCurrentMission(), spGetNextMission());
+                        VideoPanel::Play(spGetCurrentMission(), spGetNextMission());
                     }
                     
 // was: HW_COMPUTER_GAMING_WORLD_DEMO but the standard demo
