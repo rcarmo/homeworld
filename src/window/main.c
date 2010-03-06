@@ -1297,6 +1297,11 @@ void mainRescaleMainWindow(void)
     (void)utyChangeResolution(MAIN_WindowWidth, MAIN_WindowHeight, MAIN_WindowDepth);
 }
 
+void ResolutionChanged()
+{
+
+}
+
 /*-----------------------------------------------------------------------------
     Name        : mainStartupGL
     Description : startup an OpenGL renderer
